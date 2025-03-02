@@ -1,27 +1,26 @@
-const bcrypt = require('bcryptjs');
-const jsonwebtoken = require('jsonwebtoken');
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-exports.handler = async function(event, context) {
+  const password = document.getElementById("password").value;
+
   try {
-    const { password } = JSON.parse(event.body);
+    const response = await fetch("/.netlify/functions/login", {
+      method: "POST",
+      body: JSON.stringify({ password }),
+      headers: {
+        "Content-Type": "application/json", // Заголовок, чтобы сервер знал, что это JSON
+      },
+    });
 
-    // Пример проверки пароля
-    if (password === '123') {
-      const token = jsonwebtoken.sign({ email: 'user@example.com' }, 'your-secret-key', { expiresIn: '1h' });
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ message: 'Login successful', token }),
-      };
+    const data = await response.json();
+
+    if (response.ok) {
+      localStorage.setItem("token", data.token); // Сохраняем токен
+      window.location.href = "stranicapass.html"; // Перенаправляем
     } else {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({ message: 'Invalid credentials' }),
-      };
+      alert("Ошибка: " + data.message); // Сообщение об ошибке
     }
   } catch (error) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ message: 'Server error' }),
-    };
+    alert("Ошибка при отправке запроса: " + error.message);
   }
-};
+});
