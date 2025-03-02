@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const jsonwebtoken = require('jsonwebtoken');
 
 const SECRET_KEY = "your-secret-key";
-const HASHED_PASSWORD = "$2a$10$nOUIs5kJ7naTuTFkBy1veuEv1LKvaXurHj1tq2vTPWgL/Z4ZQXdpG"; // Захешированный пароль 'password123'
+const HASHED_PASSWORD = "$2a$10$wQsCjh1Zy1ewrQ2aH4YY/.fh6eF6PLp6kEIX9l27DhNJ/54U8c8D."; // Захешированный пароль 'password123'
 
 exports.handler = async function (event) {
   if (event.httpMethod !== "POST") {
