@@ -6,7 +6,7 @@ exports.handler = async function(event, context) {
     const { email, password } = JSON.parse(event.body);
 
     // Логика аутентификации (например, проверка пароля)
-    if (password === 'password123') {
+    if (password === '123') {
       const token = jsonwebtoken.sign({ email }, 'your-secret-key', { expiresIn: '1h' });
       return {
         statusCode: 200,
