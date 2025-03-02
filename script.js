@@ -4,12 +4,12 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   const password = document.getElementById("password").value;
 
   try {
-    const response = await fetch("https://throught-flames-of-war.netlify.app/.netlify/functions/login", {
+    const response = await fetch("/.netlify/functions/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ password }) // Отправляем только пароль
+      body: JSON.stringify({ password: password }) // Отправляем только пароль
     });
 
     const data = await response.json();
