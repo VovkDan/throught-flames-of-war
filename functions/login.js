@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const passwordHash = bcrypt.hashSync("password123", 10); // Только пароль
+const passwordHash = bcrypt.hashSync("123", 10); // Только пароль
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
