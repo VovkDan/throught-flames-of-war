@@ -6,7 +6,7 @@ exports.handler = async function(event, context) {
     const { password } = JSON.parse(event.body);
 
     // Пример проверки пароля
-    if (password === 'password123') {
+    if (password === '123') {
       const token = jsonwebtoken.sign({ email: 'user@example.com' }, 'your-secret-key', { expiresIn: '1h' });
       return {
         statusCode: 200,
