@@ -1,27 +1,33 @@
-const bcrypt = require('bcryptjs');
-const jsonwebtoken = require('jsonwebtoken');
+const bcrypt = require("bcryptjs");
+const jsonwebtoken = require("jsonwebtoken");
 
-exports.handler = async function(event, context) {
+const SECRET_KEY = "your-secret-key";
+const HASHED_PASSWORD = "$2a$10$nOUIs5kJ7naTuTFkBy1veuEv1LKvaXurHj1tq2vTPWgL/Z4ZQXdpG"; // Захешированный пароль 'password123'
+
+exports.handler = async function (event) {
+  if (event.httpMethod !== "POST") {
+    return { statusCode: 405, body: "Method Not Allowed" };
+  }
+
   try {
     const { password } = JSON.parse(event.body);
 
-    // Логика проверки пароля
-    if (password === '123') {
-      const token = jsonwebtoken.sign({ email: 'user@example.com' }, 'your-secret-key', { expiresIn: '1h' });
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ message: 'Login successful', token }),
-      };
-    } else {
-      return {
-        statusCode: 401,
-        body: JSON.stringify({ message: 'Invalid credentials' }),
-      };
+    const isMatch = await bcrypt.compare(password, HASHED_PASSWORD);
+    if (!isMatch) {
+      return { statusCode: 401, body: JSON.stringify({ message: "Invalid password" }) };
     }
-  } catch (error) {
+
+    const token = jsonwebtoken.sign({}, SECRET_KEY, { expiresIn: "1h" });
+
     return {
-      statusCode: 500,
-      body: JSON.stringify({ message: 'Server error' }),
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*", // Разрешаем запросы со всех источников
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message: "Login successful", token }),
     };
+  } catch (error) {
+    return { statusCode: 500, body: JSON.stringify({ message: "Server error" }) };
   }
 };
