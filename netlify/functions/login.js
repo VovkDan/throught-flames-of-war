@@ -1,8 +1,11 @@
 const bcrypt = require("bcryptjs");
 const jsonwebtoken = require("jsonwebtoken");
 
+const bcrypt = require("bcryptjs"); // ✅ Подключаем bcrypt
+const jsonwebtoken = require("jsonwebtoken");
+
 const SECRET_KEY = "your-secret-key";
-const HASHED_PASSWORD = "$2a$10$nOUIs5kJ7naTuTFkBy1veuEv1LKvaXurHj1tq2vTPWgL/Z4ZQXdpG"; // Захешированный пароль 'password123'
+const HASHED_PASSWORD = "$2a$10$nOUIs5kJ7naTuTFkBy1veuEv1LKvaXurHj1tq2vTPWgL/Z4ZQXdpG"; // Хеш пароля 'password123'
 
 exports.handler = async function (event) {
   if (event.httpMethod !== "POST") {
@@ -12,11 +15,16 @@ exports.handler = async function (event) {
   try {
     const { password } = JSON.parse(event.body);
 
+    // Проверяем пароль
     const isMatch = await bcrypt.compare(password, HASHED_PASSWORD);
     if (!isMatch) {
-      return { statusCode: 401, body: JSON.stringify({ message: "Invalid password" }) };
+      return {
+        statusCode: 401,
+        body: JSON.stringify({ message: "Invalid password" }),
+      };
     }
 
+    // Создаём токен
     const token = jsonwebtoken.sign({}, SECRET_KEY, { expiresIn: "1h" });
 
     return {
@@ -28,6 +36,9 @@ exports.handler = async function (event) {
       body: JSON.stringify({ message: "Login successful", token }),
     };
   } catch (error) {
-    return { statusCode: 500, body: JSON.stringify({ message: "Server error" }) };
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: "Server error", error: error.message }),
+    };
   }
 };
