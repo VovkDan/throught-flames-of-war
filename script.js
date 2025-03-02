@@ -3,7 +3,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     
     const password = document.getElementById("password").value;
 
-    const response = await fetch("/.netlify/functions/login", {
+    const response = await fetch("/.functions/login", {
       method: "POST",
       body: JSON.stringify({ password }),
     });
