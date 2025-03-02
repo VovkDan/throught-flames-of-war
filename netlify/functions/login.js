@@ -3,11 +3,11 @@ const jsonwebtoken = require('jsonwebtoken');
 
 exports.handler = async function(event, context) {
   try {
-    const { email, password } = JSON.parse(event.body);
+    const { password } = JSON.parse(event.body);
 
-    // Логика аутентификации (например, проверка пароля)
+    // Логика проверки пароля
     if (password === '123') {
-      const token = jsonwebtoken.sign({ email }, 'your-secret-key', { expiresIn: '1h' });
+      const token = jsonwebtoken.sign({ email: 'user@example.com' }, 'your-secret-key', { expiresIn: '1h' });
       return {
         statusCode: 200,
         body: JSON.stringify({ message: 'Login successful', token }),
