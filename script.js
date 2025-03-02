@@ -4,7 +4,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   const password = document.getElementById("password").value;
 
   try {
-    const response = await fetch("https://throught-flames-of-war.netlify.app/.netlify/functions/login",, {
+    const response = await fetch("https://throught-flames-of-war.netlify.app/.netlify/functions/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
